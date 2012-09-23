@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -66,7 +67,7 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
         MovingPath.init(firstMap.collisionList, firstMap.epathList);
 		player = new Player(0, 0, getResources(), viewport);
         enemies = new Vector<Enemy>();
-        for(int i = 0; i < 10; i++)
+        for(int i = 0; i < 1; i++)
             enemies.add(new Enemy(2435, 1218,player, getResources(), viewport, 30));
 
 
@@ -76,13 +77,19 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
 	
 	// funkcja updatujaca wsxzystko co zostanie wyswietlone
 	public void update() {
-        player.update();
+        if(!viewport.isAlive())
+            viewport.start();
+
+        if(!player.isAlive())
+            player.start();
 
         for(Enemy enemy:enemies)
-            enemy.update();
+            if(!enemy.isAlive()){
+                enemy.start();
+                Log.d("tdp", "enemy start") ;
+            }
+    }
 
-	}
-	
 	// rysowanie wszystkiego na ekranie
     @Override
 	public void draw( Canvas c ) {
@@ -93,8 +100,6 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
         for(Enemy enemy:enemies)
             enemy.draw(c);
 	}
-
-	
 
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
@@ -116,25 +121,20 @@ public class GameSurface extends SurfaceView implements SurfaceHolder.Callback {
 	}
 	@Override 
 	public boolean onTouchEvent( MotionEvent event ) {
-
-
 		if( event.getAction() == MotionEvent.ACTION_DOWN ) {
             ax = event.getX();
             ay = event.getY();
             if(player.checkActive()){
                 if(player.getBounds().contains((int)event.getX(), (int)event.getY()))
                     player.setActive(false);
-                else
-                    player.move(ax, ay);
+                else{
+                    player.setMove(ax, ay);
+                }
             }else if(player.getBounds().contains((int)event.getX(), (int)event.getY()))
                     player.setActive(true);
-
-            if(touchCounter < enemies.size()){
-                enemies.get(touchCounter).move(151, 129);
-                touchCounter++;
-            }
 		}
 		if( event.getAction() == MotionEvent.ACTION_MOVE ) {
+            Log.d("tdp", "move");
 			px = ax;
 			py = ay;
 			ax = event.getX();

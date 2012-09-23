@@ -33,7 +33,6 @@ public class MovingPath {
         this.v = v;
         this.player = player;
         this.isPlayer = true;
-
     }
 
     public MovingPath(Viewport v, Enemy enemy){
@@ -113,6 +112,13 @@ public class MovingPath {
                         tmp.setG(act.getG() + tmp.getG());
                         opened.add(tmp);
                         tmp.setVisited();
+                    }else if(!isPlayer){
+                        if((!enemy.playerDetected && enemy.chasingPlayer) || enemy.playerDetected){
+                            tmp.setParent(act);
+                            tmp.setG(act.getG() + tmp.getG());
+                            opened.add(tmp);
+                            tmp.setVisited();
+                        }
                     }
                 }
             }
@@ -129,6 +135,13 @@ public class MovingPath {
                         tmp.setG(act.getG() + tmp.getG());
                         opened.add(tmp);
                         tmp.setVisited();
+                    }else if(!isPlayer){
+                        if((!enemy.playerDetected && enemy.chasingPlayer) || enemy.playerDetected){
+                            tmp.setParent(act);
+                            tmp.setG(act.getG() + tmp.getG());
+                            opened.add(tmp);
+                            tmp.setVisited();
+                        }
                     }
                 }
             }
@@ -145,6 +158,13 @@ public class MovingPath {
                         tmp.setG(act.getG() + tmp.getG());
                         opened.add(tmp);
                         tmp.setVisited();
+                    }else if(!isPlayer){
+                        if((!enemy.playerDetected && enemy.chasingPlayer) || enemy.playerDetected){
+                            tmp.setParent(act);
+                            tmp.setG(act.getG() + tmp.getG());
+                            opened.add(tmp);
+                            tmp.setVisited();
+                        }
                     }
                 }
             }
@@ -161,6 +181,14 @@ public class MovingPath {
                         tmp.setG(act.getG() + tmp.getG());
                         opened.add(tmp);
                         tmp.setVisited();
+
+                    }else if(!isPlayer){
+                        if((!enemy.playerDetected && enemy.chasingPlayer) || enemy.playerDetected){
+                            tmp.setParent(act);
+                            tmp.setG(act.getG() + tmp.getG());
+                            opened.add(tmp);
+                            tmp.setVisited();
+                        }
                     }
                 }
             }
@@ -177,7 +205,14 @@ public class MovingPath {
                         tmp.setG(act.getG() + tmp.getG());
                         opened.add(tmp);
                         tmp.setVisited();
-                    };
+                    }else if(!isPlayer){
+                        if((!enemy.playerDetected && enemy.chasingPlayer) || enemy.playerDetected){
+                            tmp.setParent(act);
+                            tmp.setG(act.getG() + tmp.getG());
+                            opened.add(tmp);
+                            tmp.setVisited();
+                        }
+                    }
                 }
             }
             if(act.index + width + 1 < width*height && (act.index + 1)%width > 0) {
@@ -193,6 +228,13 @@ public class MovingPath {
                         tmp.setG(act.getG() + tmp.getG());
                         opened.add(tmp);
                         tmp.setVisited();
+                    }else if(!isPlayer){
+                        if((!enemy.playerDetected && enemy.chasingPlayer) || enemy.playerDetected){
+                            tmp.setParent(act);
+                            tmp.setG(act.getG() + tmp.getG());
+                            opened.add(tmp);
+                            tmp.setVisited();
+                        }
                     }
                 }
             }
@@ -209,6 +251,13 @@ public class MovingPath {
                         tmp.setG(act.getG() + tmp.getG());
                         opened.add(tmp);
                         tmp.setVisited();
+                    }else if(!isPlayer){
+                        if((!enemy.playerDetected && enemy.chasingPlayer) || enemy.playerDetected){
+                            tmp.setParent(act);
+                            tmp.setG(act.getG() + tmp.getG());
+                            opened.add(tmp);
+                            tmp.setVisited();
+                        }
                     }
                 }
             }
@@ -225,6 +274,13 @@ public class MovingPath {
                         tmp.setG(act.getG() + tmp.getG());
                         opened.add(tmp);
                         tmp.setVisited();
+                    }else if(!isPlayer){
+                        if((!enemy.playerDetected && enemy.chasingPlayer) || enemy.playerDetected){
+                            tmp.setParent(act);
+                            tmp.setG(act.getG() + tmp.getG());
+                            opened.add(tmp);
+                            tmp.setVisited();
+                        }
                     }
                 }
             }
@@ -245,8 +301,7 @@ public class MovingPath {
     public void UpdatePosition(int x, int y){
         pointS.x = x;
         pointS.y = y;
-        sf = false;
-
+        sf = true;
     }
 
     public void UpdateDestPosition(int x, int y){
@@ -287,8 +342,8 @@ public class MovingPath {
 
     public void drawPosibleMoves(Canvas c){
         Paint p = new Paint();
-            for(MyPoint point:points){
-                if(point.isEnemyPath)
+        if(!isPlayer)
+            for(MyPoint point:actPath){
                     c.drawCircle(point.x-v.getX(), point.y-v.getY(), 8, new Paint());
             }
     }
